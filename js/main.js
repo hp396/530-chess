@@ -6,6 +6,11 @@ let piece;
 let oldPiece = null;
 let captured = false;
 
+function setturn(turn,name){
+    myturn = turn;
+    myname = name;
+}
+
 function clearValidMoves() {
     for (let i = 0; i < chessArray.length; i++) {
         if (chessArray[i].getPosition() == oldSelectedPiece) {
@@ -81,24 +86,15 @@ function makeMove(element) {
 }
 
 function load() {
+    
+    for(var i = 1; i<=8;i++){
+        window['blackPawn'+(i-1)] = new Pawn("2"+i,"./../Pieces/Black/bP.png","black"); 
+    }
 
-    let blackPawn0 = new Pawn("21", "./../Pieces/Black/bP.png", "black");
-    let blackPawn1 = new Pawn("22", "./../Pieces/Black/bP.png", "black");
-    let blackPawn2 = new Pawn("23", "./../Pieces/Black/bP.png", "black");
-    let blackPawn3 = new Pawn("24", "./../Pieces/Black/bP.png", "black");
-    let blackPawn4 = new Pawn("25", "./../Pieces/Black/bP.png", "black");
-    let blackPawn5 = new Pawn("26", "./../Pieces/Black/bP.png", "black");
-    let blackPawn6 = new Pawn("27", "./../Pieces/Black/bP.png", "black");
-    let blackPawn7 = new Pawn("28", "./../Pieces/Black/bP.png", "black");
-
-    let whitePawn0 = new Pawn("71", "./../Pieces/White/wP.png", "white");
-    let whitePawn1 = new Pawn("72", "./../Pieces/White/wP.png", "white");
-    let whitePawn2 = new Pawn("73", "./../Pieces/White/wP.png", "white");
-    let whitePawn3 = new Pawn("74", "./../Pieces/White/wP.png", "white");
-    let whitePawn4 = new Pawn("75", "./../Pieces/White/wP.png", "white");
-    let whitePawn5 = new Pawn("76", "./../Pieces/White/wP.png", "white");
-    let whitePawn6 = new Pawn("77", "./../Pieces/White/wP.png", "white");
-    let whitePawn7 = new Pawn("78", "./../Pieces/White/wP.png", "white");
+    
+    for(var i = 1; i<=8;i++){
+        window['whitePawn'+(i-1)] = new Pawn("7"+i,"./../Pieces/White/wP.png","white"); 
+    }
 
     let blackRook1 = new Rook("11", "./../Pieces/Black/bR.png", "black");
     let blackRook2 = new Rook("18", "./../Pieces/Black/bR.png", "black");
@@ -127,24 +123,13 @@ function load() {
 
     let whiteKing1 = new King("85", "./../Pieces/White/wK.png", "white");
 
-    chessArray.push(blackPawn0);
-    chessArray.push(blackPawn1);
-    chessArray.push(blackPawn2);
-    chessArray.push(blackPawn3);
-    chessArray.push(blackPawn4);
-    chessArray.push(blackPawn5);
-    chessArray.push(blackPawn6);
-    chessArray.push(blackPawn7);
-
-    chessArray.push(whitePawn0);
-    chessArray.push(whitePawn1);
-    chessArray.push(whitePawn2);
-    chessArray.push(whitePawn3);
-    chessArray.push(whitePawn4);
-    chessArray.push(whitePawn5);
-    chessArray.push(whitePawn6);
-    chessArray.push(whitePawn7);
-
+    for(var i = 0; i <=7;i++){
+        chessArray.push(blackPawn+i)
+    }
+    for(var i = 0; i <=7;i++){
+        chessArray.push(whitePawn+i)
+    }
+    
     chessArray.push(blackRook1);
     chessArray.push(blackRook2);
 
@@ -174,10 +159,6 @@ function load() {
     let board = new Board(chessArray);
     board.renderBoard();
 
-    // for(let i = 0; i < chessArray.length; i++){
-    //     let piece = chessArray[i];
-    //     document.getElementById(piece.getPosition()).src = piece.getSource();
-    // }
 }
 let first = true;
 
@@ -198,7 +179,7 @@ function select(position) {
                 piece = chessArray[i];
             }
         }
-        
+   
     }
 
     if(oldPiece != null){

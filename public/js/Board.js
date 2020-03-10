@@ -5,7 +5,7 @@ class Board {
     }
 
     renderBoard() {
-        this.boardHTML = `<table class="ChessBoard">
+        this.boardHTML = `<table class="ChessBoard" id="chesstable">
         <tr>
             <td><div class="BoardBlock" onclick="makeMove(this)"><img onclick="select(this.id)" id="11"></div></td>
             <td><div class="BlackDimension BlackBlock" onclick="makeMove(this)"><img onclick="select(this.id)" id="12"></div></td>

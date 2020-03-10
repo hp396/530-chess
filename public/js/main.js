@@ -21,6 +21,9 @@ let checker;
 let checked;
 let moves = new Array();
 let cansacrifice = false;
+let whitebg = "white";
+let blackbg = "gray";
+let clearvalidclass = "BlackDimension BlackBlock";
 
 var script = document.createElement('script');	
 script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';	
@@ -49,13 +52,32 @@ $(document).ready(function () {
     });	
 });		
 function skipTurn(){
-
 	if (myname == "black"){
 		myname = "white";
 	}else if(myname == "white"){
 		myname = "black";
-	}
-	// console.log(myname);
+    }
+    changeboardcss()
+}
+
+function changeboardcss(){
+    var table = document.getElementById('chesstable');
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            let blackcol = col.querySelector('.BlackDimension');
+            if (blackcol != null){
+                if(blackcol.hasAttribute('style')){
+                    blackcol.style.removeProperty('background');
+                }
+                blackcol.classList.remove("BlackDimension")
+                blackcol.classList.add("BlueBlock");
+                clearvalidclass = "BlackBlock BlueBlock";
+                blackbg = '#0000FF';
+            }
+        }  
+
+    }
+    
 }
 
 function setturn(turn,name){
@@ -249,10 +271,10 @@ function clearValidMoves() {
         if (chessArray[i].getPosition() == oldSelectedPiece) {
             let selectedPiece = chessArray[i].getMoveArray()
             for (let j = 0; j < selectedPiece.length; j++) {
-                if (document.getElementById(selectedPiece[j]).parentElement.className == "BlackDimension BlackBlock") {
-                    document.getElementById(selectedPiece[j]).parentElement.style.background = "gray";
+                if (document.getElementById(selectedPiece[j]).parentElement.className == clearvalidclass) {
+                    document.getElementById(selectedPiece[j]).parentElement.style.background = blackbg;
                 } else {
-                    document.getElementById(selectedPiece[j]).parentElement.style.background = "white";
+                    document.getElementById(selectedPiece[j]).parentElement.style.background = whitebg;
                 }
             }
         }
@@ -277,10 +299,10 @@ function capture(){
 
 function clearMoveMade() {
     for (let i = 0; i < moveOptions.length; i++) {
-        if (document.getElementById(moveOptions[i].toString()).parentElement.className == "BlackDimension BlackBlock") {
-            document.getElementById(moveOptions[i].toString()).parentElement.style.background = "gray";
+        if (document.getElementById(moveOptions[i].toString()).parentElement.className == clearvalidclass) {
+            document.getElementById(moveOptions[i].toString()).parentElement.style.background = blackbg;
         } else {
-            document.getElementById(moveOptions[i].toString()).parentElement.style.background = "white";
+            document.getElementById(moveOptions[i].toString()).parentElement.style.background = whitebg;
         }
     }
 }
