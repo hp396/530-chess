@@ -1,0 +1,101 @@
+.Board_div{ /*DONE*/
+	position: fixed;
+	top: 50%;
+	left: 50%;
+/*	background: linear-gradient(to right, blue 50%, yellow 50%);*/
+	transform: translate(-50%, -50%);
+}
+.MenuBody {/*DONE*/
+  background-color: lightblue;			/*change color*/
+}
+table, th , td{
+    border: 1px solid black;
+}
+
+.ChessBoard{
+    width: 100%;
+    height: 100%;
+    
+}
+.btn {	/*DONE*/
+    background: #696969;
+    border-color: #406C39;
+    color: #fff;
+	font-size:25px;
+}
+.MenuHeading{	/*DONE*/
+	top:30%;
+	left:50%;
+	text-align:center;
+	bottom:70%;
+}
+.btn:hover {	/*DONE*/
+    background: #006699;
+    border-color: #406C39;
+    color: 	#FFC600;
+}
+.MenuDiv{	/*DONE*/
+     position: fixed;
+     top: 50%;
+     left: 50%;
+	 transform: translate(-50%, -50%);
+}
+
+.jumbotron{	/*DONE*/
+    padding: 1.5rem;
+    background: 0;
+	font-size:70px;
+}
+.SelectSection{
+    background: #bfbc9f !important;
+}
+.CannotPlayMenu{	/*DONE*/
+	color:white;
+	top:30%;
+	left:50%;
+	text-align:center;
+	bottom:70%;
+}
+
+.CannotPlayPara{	/*DONE*/
+	color:white;
+	font-size:50px;
+	top:50%;
+	left:50%;
+	text-align:center;
+	bottom:70%;
+}
+
+.BlackBlock{
+    height: 100%;
+    height: 80px;
+    width:  80px;
+    background: gray;
+}
+
+
+.BlockDimension{
+	height: 80px;
+	width:  80px;
+	text-align: center;
+}
+
+.BlackDimension{
+	height: 80px;
+	width:  80px;
+	text-align: center;
+	background: gray;
+} 
+
+th,td{
+    text-align: left;
+}
+.Cell{	/*DONE*/
+    text-align: left;
+	width:80px;
+	height:80px;
+}
+.BoardBlock{
+    height: 80px;
+	width:  80px;
+}

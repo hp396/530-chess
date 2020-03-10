@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Game</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/main.css'>
+    <script type=text/javascript src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src='./js/main.js'>
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+	<script src='js/main.js'></script>
+    <script src="js/Board.js"></script>
+    <script src="js/Piece.js"></script>
+    <script src="js/King.js"></script>
+    <script src="js/Queen.js"></script>
+    <script src="js/Bishop.js"></script>
+    <script src="js/Knight.js"></script>
+    <script src="js/Rook.js"></script>
+    <script src="js/Pawn.js"></script>
+	<script type="text/javascript">
+	let turn = '{{ turn }}';
+	let name = '{{ name }}';
+	if (turn == 'true'){
+		turn = true;
+		setturn(turn,name);
+	}else if (turn == 'false'){
+		turn = false;
+		setturn(turn,name);
+	}
+
+	$(document).ready(function() {
+            namespace = '/test';			
+			socket = io(namespace);
+
+		$('form#join').submit(function(event) {
+				socket.emit('join', {room: '1'});
+                return false;
+            });
+	});		
+	
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="sweetalert2.all.min.js"></script>
+</head>
+<body onmouseover ='document.getElementById("joinSubmit").click();' onload="load()" style = "background-color:black">
+	<form id="join" method="POST" action="#">
+        <input style="visibility: hidden" type="submit" value="Join Room" id="joinSubmit">	
+    </form>
+	<div>	
+<input style="visibility: hidden" type="submit" value="skip turn" id="skipturn" onclick = "skipTurn()">	
+    <div id="log"></div>
+	</div>
+   	<div class="Board_div" style = "background-color:white">
+    </div>
+	
+</body>
+</html>

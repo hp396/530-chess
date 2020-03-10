@@ -1,0 +1,46 @@
+.Board_div{
+    width: 600px;
+    height: 600px;
+}
+
+table, th , td{
+    border: 1px solid black;
+}
+
+.ChessBoard{
+    width: 100%;
+    height: 100%;
+    
+}
+
+.SelectSection{
+    background: #bfbc9f !important;
+}
+
+.BlackBlock{
+    height: 100%;
+    width: 100px;
+    background: gray;
+}
+
+th, td{
+    text-align: left;
+}
+
+.BoardBlock{
+    height: 80px;
+    width: 100px;
+}
+
+.BlockDimension{
+	height: 100px;
+	width: 100px;
+	text-align: center;
+}
+
+.BlackDimension{
+	height: 100px;
+	width: 100px;
+	text-align: center;
+	background: gray;
+}
