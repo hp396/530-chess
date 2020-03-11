@@ -128,11 +128,10 @@ pawnMovement("25","45")
 skipturn()
 #White turn
 pawnMovement("56","46")
+
 skipturn()
 #Black turn
 pawnMovement("27","37")
-
-
 
 skipturn()
 #White turn

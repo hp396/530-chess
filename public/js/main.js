@@ -51,7 +51,6 @@ $(document).ready(function () {
         }	
     });	
     socket.on('my_response2', function (msg, cb) {	
-        console.log("RESPONDS")
         if (msg['loser']='black'){
             loser = 'black'
             winner = 'white'
@@ -59,20 +58,13 @@ $(document).ready(function () {
             winner = 'black'
             loser='white'
         }
-        // console.log(msg)
-        
         totalplayers = msg['players']
-        console.log(msg)
         window.location='/resign';
-        // if (cb) {	
-        //     cb();	
-        //     // window.location='/resign';
-        // }	
     });	
     socket.on('my_response3', function (msg) {	
-        console.log("RESPONDddddS")
-        console.log(msg);
-
+        //To tell user if they can or cannot play the game yet
+        // console.log("RESPONDddddS")
+        // console.log(msg);
     });
     
 });		
@@ -110,8 +102,6 @@ function changeboardcss(){
 function setturn(turn,name){
 	myturn = turn;
     myname = name;
-    // totalplayers = numberofplayers;
-    // console.log(totalplayers);
 }
 
 function createObject(object, i){
@@ -182,18 +172,16 @@ function updateBoard(oldPosition, newPosition, board) {
     piece.validMoves = new Array();	
     moveOptions = new Array();	
 }	
+
 function test(msg){	
     let oldPos = msg.data[0];	
     let newPos = msg.data[1];	
     chessArray = msg.data[2];
     realCheck = msg.data[3];
-    console.log(realCheck);
     checkarray = msg.data[4];
     checkopponentpos = msg.data[5];
     checked = msg.data[6];
     checker = msg.data[7];
-    // console.log("TEST");
-    // console.log(msg.data)
     
     for(let i  = 0; i < chessArray.length; i++){	
         createObject(chessArray[i], i);	
@@ -383,15 +371,13 @@ function checkPawnPromotion(childId){
     }
 
     promotedPieceType = promotedPiece.source.substring(promotedPiece.source.length-6, promotedPiece.source.length);
-    // console.log(promotedPieceType);
     promotedPiecePosition = promotedPiece.position;
-    // console.log(promotedPiecePosition);
     if(promotedPieceType.includes("P.png")){
         switch(promotedPieceType[0]){
             case "b":
                 if(promotedPiecePosition > 80 && promotedPiecePosition < 90){
                     let pieceType = "black";
-                    // console.log("can promote");
+
                     var choice = prompt("What do you want to promote to?");
                     if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
                         console.log("User cancelled the prompt.");
@@ -428,7 +414,6 @@ function checkPawnPromotion(childId){
             case "w":
                 if(promotedPiecePosition > 10 && promotedPiecePosition < 20){
                     let pieceType = "white";
-                    // console.log("can promote");
                     var choice = prompt("What do you want to promote to?");
                     if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
                         console.log("User cancelled the prompt.");
@@ -534,8 +519,6 @@ function checkkingmove(){
             chessArray[i].clean();
             if(chessArray[i].constructor.name =="Rook"){
                 potentialCheckPiece = chessArray[i].getNextCheckValidMoves(chessArray[i])
-                console.log("SDFSSDFS");
-                console.log(potentialCheckPiece);
             }else{
                 potentialCheckPiece = chessArray[i].getValidMoves();
             }
@@ -547,7 +530,6 @@ function checkkingmove(){
             }
         }
     }
-    console.log(kingnextmoves)
     
     if(kingnextmoves.length>0){
         return true
@@ -830,10 +812,8 @@ function select(position) {
         piece.getValidMoves();
     }
     if (canCastle(piece)) {
-        console.log("castling works");
+
         castle(piece);
-        //myturn = !myturn
-    } else {
-        console.log("castle fail");
+
     }
 }

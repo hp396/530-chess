@@ -1,12 +1,12 @@
-.Board_div{ /*DONE*/
+.Board_div{
 	position: fixed;
 	top: 50%;
 	left: 50%;
 /*	background: linear-gradient(to right, blue 50%, yellow 50%);*/
 	transform: translate(-50%, -50%);
 }
-.MenuBody {/*DONE*/
-  background-color: lightblue;			/*change color*/
+.MenuBody {
+	background-image: url('./../img/bg.gif');			/*	CITATION:	chess.com/gifs */
 }
 table, th , td{
     border: 1px solid black;
@@ -91,7 +91,7 @@ table, th , td{
     height: 100%;
     
 }
-.btn {	/*DONE*/
+.btn {	
     background: #696969;
     border-color: #406C39;
     color: #fff;
