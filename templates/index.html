@@ -19,35 +19,48 @@
     <script src="js/Pawn.js"></script>
 	<script type="text/javascript">
 	let turn = '{{ turn }}';
-	let name = '{{ name }}';
-	if (turn == 'true'){
-		turn = true;
+    let name = '{{ name }}';
+    let numberofplayers = '{{ players }}';
+    $(document).ready(function() {
+            namespace = '/test';			
+            socket = io(namespace);	
+    });
+    
+    if (turn == 'true'){
+        turn = true;
 		setturn(turn,name);
 	}else if (turn == 'false'){
-		turn = false;
+        turn = false;
 		setturn(turn,name);
+        // updateplayer();
     }
-    
-    //Add Nav
-    //Add resign button inside nav
-	$(document).ready(function() {
-            namespace = '/test';			
-			socket = io(namespace);
-
-		$('form#join').submit(function(event) {
-				socket.emit('join', {room: '1'});
-                return false;
-            });
-	});		
+    function Resign(){
+        socket.emit('leave', {room: '1', 'player': myname});
+        window.location='/resign';
+        
+    }		
 	
     </script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+
+    function myFunction(){
+        var myDropdown = document.getElementById("myDropdown");
+        if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+        }
+  }
+    
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="sweetalert2.all.min.js"></script>
+
 </head>
-<body onmouseover ='document.getElementById("joinSubmit").click();' onload="load()" style = "background-color:black">
+<body onload="load()" style = "background-color:black">
     
     <header>
-        <div class="navbar">
+        <!-- <div class="navbar">
+            onmouseover ='document.getElementById("joinSubmit").click();' 
+            <a href="#home" onclick = "Resign()">Regisn</a>
             <div class="dropdown">
                 <input type = "button" class="btn" value="Dropdown">
                 <div class = "dropdown-item">
@@ -56,7 +69,20 @@
                 </div>
                 
             </div>
-        </div>
+        </div> -->
+        <div class="navbar">
+            <a id="disconnect" onclick="Resign()">Resign</a>
+            <div class="dropdown">
+            <button class="dropbtn" onclick="myFunction()">Dropdown
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content" id="myDropdown">
+              <a href="#">Link 1</a>
+              <a href="#">Link 2</a>
+              <a href="#">Link 3</a>
+            </div>
+            </div> 
+          </div>
     </header>
     
     
@@ -105,7 +131,7 @@
 <input  type="submit" value="skip turn" id="skipturn" onclick = "skipTurn()">	
     <div id="log"></div>
 	</div>
-   	<div class="Board_div" style = "background-color:white">
+   	<div class="Board_div" style = "background-color:white"></div>
     </div>
 	
 </body>

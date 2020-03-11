@@ -25,6 +25,7 @@
                 if (cb)
                     cb();
             });
+
             var ping_pong_times = [];
             var start_time;
             window.setInterval(function() {
@@ -53,10 +54,10 @@
                 socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
                 return false;
             });
-			$('form#send_room').submit(function(event) {
-                socket.emit('my_room_event', {room: $('#room_name').val(), data: $('#room_data').val()});
-                return false;
-            });
+			// $('form#send_room').submit(function(event) {
+            //     socket.emit('my_room_event', {room: $('#room_name').val(), data: $('#room_data').val()});
+            //     return false;
+            // });
            $('form#leave').submit(function(event) {
                 socket.emit('leave', {room: $('#leave_room').val()});
                 return false;
@@ -95,4 +96,7 @@
 
 	<div id="log"></div>
 </body>
+<footer>
+    <small style="color: azure;position: absolute;text-align: center;padding-left: 67%;bottom: 10px;">&copy; Copyright 2026, Drexel Univercity Version 1.0</small>
+</footer>
 </html>

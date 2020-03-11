@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+	<link rel='stylesheet' type='text/css' media='screen' href='./css/main.css'>
+    <script type=text/javascript src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src='./js/main.js'>
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+	</script>
+	<script>
+
+	</script>
+	<script>
+		let finalwinner = '{{ winners }}';
+		let finalloser = '{{ losers }}';
+		let finalplayers = '{{ players }}';
+		window.onload = function(){
+			if (finalplayers==2){
+				document.getElementById('endgamepara').innerHTML = 'Player ' + finalloser + ' resigned and by default player ' +finalwinner +' wins!';
+				
+			} else{
+				document.getElementById('endgamepara').innerHTML = 'You have resigned from the game, you were not playing with any other player!';
+			}
+			setTimeout(function(){ window.location='/' }, 10000);
+		};
+	</script>	
+</head>
+<body style = "background-color:black">
+	<div>
+		<h1 class="jumbotron CannotPlayMenu">C.H.E.S.S.</h1>
+	</div>
+	<div>
+	<p class="CannotPlayPara" id="endgamepara"></p>
+	</div>
+</body>

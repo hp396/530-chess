@@ -29,51 +29,74 @@ def background_thread():
 
 @app.route('/')
 def index():
+    global numberofplayer, PlayerA, PlayerB
+    numberofplayer = 0
+    PlayerA = 0
+    PlayerB = 0
     return render_template('menu.html', async_mode=socketio.async_mode)
 
-app.route('/index')
-def game(name):
-    return render_template('index.html')
+# app.route('/')
+# def game(name):
+#     global numberofplayer, PlayerA, PlayerB
+#     numberofplayer = 0
+#     PlayerA = 0
+#     PlayerB = 0
+#     return render_template('menu.html', async_mode=socketio.async_mode)
 
 @app.route('/<name>')
 def generic(name):
     global PlayerA
     global PlayerB
+    global winner,loser
+    global numberofplayer
+    if name == "resign":
+        if numberofplayer == 2:
+
+            return render_template(name + '.html',winners = winner, losers = loser, players = 2)
+        elif numberofplayer ==1:
+
+            return render_template(name + '.html',winners = winner, losers = loser, players = 1)
+        # else:
+        #     return ""
     if name == "index":
-        
-        global numberofplayer
         if numberofplayer<2:
-            numberofplayer+=1
             if PlayerA ==0:
                 PlayerA = Player("White",True)
+                numberofplayer=1
                 return render_template(name + '.html',turn='true',name='white')
             elif PlayerB == 0:
+                numberofplayer=2
                 PlayerB = Player("Black",False)
                 return render_template(name + '.html',turn='false',name='black')
-        else:
+        elif numberofplayer >=2:
             return render_template('cannotplay.html')
+    
     else:
         return render_template(name+'.html')
 
 @socketio.on('join', namespace='/test')
 def join(message):
-    join_room(message['room'])
+    join_room('1')
     session['receive_count'] = session.get('receive_count', 0) + 1  
     emit('my_response',
         {'data': 'In rooms: ' + ', '.join(rooms()),
         'count': session['receive_count']})
 
 #May use for disconnecting player
-# @socketio.on('leave', namespace='/test')
-# def leave(message):
-#     leave_room(message['room'])
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('my_response1',
-#          {'data': 'In rooms: ' + ', '.join(rooms()),
-#           'count': session['receive_count']})
-# @socketio.on('disconnect', namespace='/test')
-# def test_disconnect():
-#     print('Client disconnected', request.sid)
+@socketio.on('leave', namespace='/test')
+def leave(message):
+    global numberofplayer, PlayerA,PlayerB,winner,loser
+    print(numberofplayer)
+    if message['player'] == 'white':
+        winner = 'black'
+        loser = 'white'
+    else:
+        loser = 'black'
+        winner = 'white'
+    PlayerA = 0
+    PlayerB = 0 
+    session['receive_count'] = session.get('receive_count', 0) -1
+    emit('my_response2',{'data': 'In rooms: ' + ', '.join(rooms()),'count': session['receive_count'],'loser':message['player'],'players':numberofplayer} ,room=message['room'])
 
 @socketio.on('my_room_event', namespace='/test')
 def send_room_message(message):
@@ -82,30 +105,15 @@ def send_room_message(message):
     if PlayerA!=0 and PlayerB!=0:
         PlayerA.ismove = not PlayerA.ismove
         PlayerB.ismove = not PlayerB.ismove
-        
         session['receive_count'] = session.get('receive_count', 0) + 1
-        
-        
         emit('my_response1',
              {'data': message['data'], 'count': session['receive_count']},
              room=message['room'])
 
-#USELESS
-#@socketio.on('my_ping', namespace='/test')
-#def ping_pong():
- #   emit('my_pong')
-    
-#@app.route('/postmethod', methods = ['POST'])
-#def get_post_javascript_data():
- #   if request.method == "POST":
-  #      jsdata = json.loads(request.form['javascript_data'])
-   # gamepiece = jsdata[0]['piece']
-    #current_loc = jsdata[0]['current_loc']
-    #new_loc = jsdata[0]['new_loc']
-    #return jsonify(gamepiece,current_loc,new_loc)
-
 if __name__ == '__main__':
     PlayerA = 0
     PlayerB = 0
+    winner=0
+    loser=0
     numberofplayer=0
     socketio.run(app, debug=True)

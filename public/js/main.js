@@ -15,6 +15,9 @@ let isOnCheckHelper;
 let socket;	
 let myturn;
 let myname;
+let totalplayers;
+let loser;
+let winner;
 let checkarray = new Array();
 let checkopponentpos;
 let checker;
@@ -41,15 +44,37 @@ $(document).ready(function () {
             cb();	
     });	
     socket.on('my_response1', function (msg, cb) {	
-        console.log("SFSDAF")
-        console.log(myturn)
         myturn = !myturn;
-        console.log(myturn)
 		test(msg);	
         if (cb) {	
             cb();	
         }	
     });	
+    socket.on('my_response2', function (msg, cb) {	
+        console.log("RESPONDS")
+        if (msg['loser']='black'){
+            loser = 'black'
+            winner = 'white'
+        }else{
+            winner = 'black'
+            loser='white'
+        }
+        // console.log(msg)
+        
+        totalplayers = msg['players']
+        console.log(msg)
+        window.location='/resign';
+        // if (cb) {	
+        //     cb();	
+        //     // window.location='/resign';
+        // }	
+    });	
+    socket.on('my_response3', function (msg) {	
+        console.log("RESPONDddddS")
+        console.log(msg);
+
+    });
+    
 });		
 function skipTurn(){
 	if (myname == "black"){
@@ -59,6 +84,8 @@ function skipTurn(){
     }
     changeboardcss()
 }
+
+
 
 function changeboardcss(){
     var table = document.getElementById('chesstable');
@@ -82,8 +109,9 @@ function changeboardcss(){
 
 function setturn(turn,name){
 	myturn = turn;
-	myname = name;
-
+    myname = name;
+    // totalplayers = numberofplayers;
+    // console.log(totalplayers);
 }
 
 function createObject(object, i){
@@ -159,30 +187,44 @@ function test(msg){
     let newPos = msg.data[1];	
     chessArray = msg.data[2];
     realCheck = msg.data[3];
+    console.log(realCheck);
     checkarray = msg.data[4];
     checkopponentpos = msg.data[5];
-    checker = msg.data[6];
-    checked = msg.data[7];
+    checked = msg.data[6];
+    checker = msg.data[7];
     // console.log("TEST");
     // console.log(msg.data)
     
     for(let i  = 0; i < chessArray.length; i++){	
         createObject(chessArray[i], i);	
     }
-    if(realCheck){
-        swal({
-            icon: 'error',
-            title: 'Check!'
-        });
+    if(realCheck){	
+        let playerwinner;
+        if(ischeckmate()){	
+            if (checker =='black'){
+                playerwinner = "Player 1"
+            }else{ playerwinner = "Player 2"}
+            swal({title:"CheckMate, " + playerwinner +" wins!", icon: "success"});	
+            setTimeout(function(){ window.location='/' }, 5000);
+        }else{	
+            swal({	
+                icon: 'error',	
+                title: 'Check!'	
+            });	
+        }	
     }
     updateBoard(oldPos, newPos, globalBoard);	
 }	
 let joined = false;	
 function sendData(oldPosition, newPosition, chessArray ,realCheck,checkarray,checkopponentpos,checker,checked){
     let data = [oldPosition, newPosition, chessArray, realCheck,checkarray,checkopponentpos,checker,checked]
-    // console.log(checkarray);	
+    // socket.emit('update', { room: '1' , "data" : numberofplayers});
     socket.emit('my_room_event', { room: '1' , "data" : data});	
 }
+
+// function updateplayer(){
+//     socket.emit('update', { room: '1' , data : numberofplayers});
+// }
 
 function isCheckCastle(nextMoveArray,type) {
     for (var j = 0; j < nextMoveArray.length; j++) {
@@ -424,7 +466,7 @@ function checkPawnPromotion(childId){
     }
 }
 function checkMakeMove(element){
-    if (myturn && piece.getType() == myname){
+    if (myturn && piece.getType() == myname ){
         let old = childId;
         childId = parseFloat(element.childNodes[0].id);
         if (moves.includes(childId)){       //Moves is an array from next check move (from piece class)
@@ -448,6 +490,7 @@ function checkMakeMove(element){
                 }
                 realCheck = isOnCheck || isOnCheckHelper;
                 if (realCheck){
+                    sendData(old, childId.toString(), chessArray, realCheck, checkarray, checker, checked);
                     for (var i = 0; i<chessArray.length;i++){
                         if (chessArray[i].position == childId.toString()){
                             checkarray = chessArray[i].getNextValidMoves(chessArray[i]);        //only get moves in direction of king Queen gets all directions
@@ -514,27 +557,31 @@ function checkkingmove(){
 function ischeckmate(){
     //Checks if there is any piece that can do capture during check
     for (var i = 0; i< chessArray.length; i++){
-        if(chessArray[i].getType()==checked && chessArray[i].getValidMoves().includes(checkopponentpos)){
+        if(chessArray[i].getType()!=checked && chessArray[i].getValidMoves().includes(checkopponentpos)){
             return false
         }
     }
     // console.log(checked);
     //Check for sacrifice (pieces that get between king and check piece)
     //Need array of next move only at the direction of king!
-    for (var i = 0; i< chessArray.length; i++){
-        // console.log(chessArray[i].constructor.name)
-        if(chessArray[i].getType()==checked && chessArray[i].constructor.name != "King"){
-            chessArray[i].clean();
-            let sacrificemoves = chessArray[i].getValidMoves()
+    //
+    //
+//  doesnt run!
+
+    // for (var i = 0; i< chessArray.length; i++){
+    //     // console.log(chessArray[i].constructor.name)
+    //     if(chessArray[i].getType()==checked && chessArray[i].constructor.name != "King"){
+    //         chessArray[i].clean();
+    //         let sacrificemoves = chessArray[i].getValidMoves()
             
-            for (var j = 0; j< sacrificemoves.length; j++){
-                if(checkarray.includes(sacrificemoves[j])){         //Same bug of valid moves not in line of check
-                    realCheck = false;
-                    return false
-                }
-            }
-        }
-    }
+    //         for (var j = 0; j< sacrificemoves.length; j++){
+    //             if(checkarray.includes(sacrificemoves[j])){         //Same bug of valid moves not in line of check
+    //                 realCheck = false;
+    //                 return false
+    //             }
+    //         }
+    //     }
+    // }
     // console.log("CHECK KING");
     //Check for king possible moves
     if(checkkingmove()){return false}
@@ -568,6 +615,7 @@ function makeMove(element) {
                 }
                 realCheck = isOnCheck || isOnCheckHelper;
                 if (realCheck){
+                    // sendData(old, childId.toString(), chessArray, realCheck,checkarray,checkopponentpos,checked,checker);	
                     for (var i = 0; i<chessArray.length;i++){
                         if (chessArray[i].position == childId.toString()){
                             checkarray = new Array();
@@ -585,11 +633,12 @@ function makeMove(element) {
                     checked = 0;
                     checker = 0;
                 }
-                if (realCheck){
-                    if (ischeckmate()){                         //Send to back end
-                        swal({title:"CheckMate", icon:"success"});
-                    }
-                }
+                // if (realCheck){	            FOR SELENIUM TESTING
+                //         if (ischeckmate()){                         //Send to back end	
+
+                //             swal({title:  + " CheckMate", icon:"success"});	
+                //         }
+                //     }
                 // King moves and puts itself in check 
                 sendData(old, childId.toString(), chessArray, realCheck,checkarray,checkopponentpos,checked,checker);	
             }	
@@ -633,9 +682,13 @@ function isCheck(nextMoveArray){
     }
     return false;
 }
+function joinroom(){
+    socket.emit('join', {room: '1'});
+    return false;
+}
 
 function load() {
-
+    joinroom()
     let blackPawn0 = new Pawn("21", "Pieces/Black/bP.png", "black");
     let blackPawn1 = new Pawn("22", "Pieces/Black/bP.png", "black");
     let blackPawn2 = new Pawn("23", "Pieces/Black/bP.png", "black");
@@ -727,11 +780,12 @@ function load() {
     boardObj = new Board(chessArray);	
     boardObj.renderBoard();	
     globalBoard = boardObj.boardHTML;
+    
 }
 let first = true;
 
 function select(position) {
-    if(myturn){
+    if(myturn ){
 		let found = false;
 		captured = false;
 		for (let i = 0; i < chessArray.length; i++) {
