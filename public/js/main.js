@@ -28,6 +28,7 @@ let whitebg = "white";
 let blackbg = "gray";
 let clearvalidclass = "BlackDimension BlackBlock";
 let highlightvisible = true;
+let currentwhite = "BoardBlock";
 
 var script = document.createElement('script');	
 script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';	
@@ -75,11 +76,6 @@ $(document).ready(function () {
                 });	
             } 
         }, 2000);
-        
-        
-        //To tell user if they can or cannot play the game yet
-        // console.log("RESPONDddddS")
-        // console.log(msg);
     });
     
 });		
@@ -89,31 +85,102 @@ function skipTurn(){
 	}else if(myname == "white"){
 		myname = "black";
     }
-    changeboardcss()
 }
 
 function toggleDiff(){
     highlightvisible = !highlightvisible;
 }
 
-function changeboardcss(){
+function modernbluetheme(){
     var table = document.getElementById('chesstable');
+
     for (var i = 0, row; row = table.rows[i]; i++) {
         for (var j = 0, col; col = row.cells[j]; j++) {
-            let blackcol = col.querySelector('.BlackDimension');
+            let blackcol = col.querySelector(clearvalidclass);
             if (blackcol != null){
                 if(blackcol.hasAttribute('style')){
                     blackcol.style.removeProperty('background');
                 }
-                blackcol.classList.remove("BlackDimension")
+                blackcol.classList.remove("clearvalidclass")
                 blackcol.classList.add("BlueBlock");
-                clearvalidclass = "BlackBlock BlueBlock";
+                clearvalidclass = "BlueBlock BlackBlock";
                 blackbg = '#0000FF';
+                whitebg='';
             }
         }  
 
     }
     
+}
+
+function clearbg(){
+    var table = document.getElementById('chesstable');
+    var tablediv = $('#chesstable div');
+    console.log(tablediv)
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeAttr("style");
+        // tablediv.addClass(CSS.escape(newblackclass));  
+    }
+    // $("#foo").removeAttr("style");
+		
+    // for (var i = 0, row; row = table.rows[i]; i++) {
+    //     for (var j = 0, col; col = row.cells[j]; j++) {
+    //         if(col.hasAttribute('style')){
+    //             col.removeAttribute('style');
+    //         }
+    //         console.log(col);
+    //     }  
+
+    // }
+}
+
+function bwtheme(){
+    var newblackclass = 'BlackDimension';
+    let newwhiteclass = 'BoardBlock';
+    let currentblack=  clearvalidclass.split(" ")[0];
+    clearbg();
+    var tablediv = $('#chesstable div.'+CSS.escape(currentblack));
+
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentblack));
+        tablediv.addClass(CSS.escape(newblackclass));  
+    }
+
+    var tablediv = $('#chesstable div.'+CSS.escape(currentwhite));
+
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentwhite));
+        tablediv.addClass(CSS.escape(newwhiteclass));  
+    }
+    clearvalidclass = "BlackDimension BlackBlock";
+    currentwhite = newwhiteclass;
+    blackbg = 'gray';
+    whitebg= 'white';
+}
+
+function classictheme(){
+
+    var newblackclass = 'ClassicBlack';
+    let newwhiteclass = 'ClassicWhite';
+    let currentblack=  clearvalidclass.split(" ")[0];
+    clearbg();
+    var tablediv = $('#chesstable div.'+CSS.escape(currentblack));
+
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentblack));
+        tablediv.addClass(CSS.escape(newblackclass));  
+    }
+
+    var tablediv = $('#chesstable div.'+CSS.escape(currentwhite));
+
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentwhite));
+        tablediv.addClass(CSS.escape(newwhiteclass));  
+    }
+    clearvalidclass = "ClassicBlack BlackBlock";
+    currentwhite = newwhiteclass;
+    blackbg = '#B5651D';
+    whitebg= '#FFB775';
 }
 
 function setturn(turn,name){
@@ -218,7 +285,7 @@ function test(msg){
                 playerwinner = "Player 1"
             }else{ playerwinner = "Player 2"}
             swal({title:"CheckMate, " + playerwinner +" wins!", icon: "success"});	
-            setTimeout(function(){ window.location='/' }, 5000);
+            setTimeout(function(){ window.location='/menu' }, 5000);
         }else{	
             swal({	
                 icon: 'error',	
@@ -326,11 +393,11 @@ function clearValidMoves() {
         if (chessArray[i].getPosition() == oldSelectedPiece) {
             let selectedPiece = chessArray[i].getMoveArray()
             for (let j = 0; j < selectedPiece.length; j++) {
-                if (document.getElementById(selectedPiece[j]).parentElement.className == clearvalidclass) {
+                if ((document.getElementById(selectedPiece[j]).parentElement.className == "BlackDimension BlackBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "BlackBlock ClassicBlack")) {
                     document.getElementById(selectedPiece[j]).parentElement.style.background = blackbg;
-                } else {
+                } else if ((document.getElementById(selectedPiece[j]).parentElement.className == "BoardBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "ClassicWhite")){
                     document.getElementById(selectedPiece[j]).parentElement.style.background = whitebg;
-                }
+                } 
             }
         }
     }
@@ -354,7 +421,7 @@ function capture(){
 
 function clearMoveMade() {
     for (let i = 0; i < moveOptions.length; i++) {
-        if (document.getElementById(moveOptions[i].toString()).parentElement.className == clearvalidclass) {
+        if ((document.getElementById(moveOptions[i].toString()).parentElement.className == "BlackDimension BlackBlock") ||(document.getElementById(moveOptions[i].toString()).parentElement.className== "BlackBlock ClassicBlack")){
             document.getElementById(moveOptions[i].toString()).parentElement.style.background = blackbg;
         } else {
             document.getElementById(moveOptions[i].toString()).parentElement.style.background = whitebg;
@@ -612,8 +679,6 @@ function ischeckmate(){
     // console.log("CHECK KING");
     //Check for king possible moves
     // if(checkkingmove()){return false}
-
-    
     return true;
 }
 
@@ -840,7 +905,7 @@ function select(position) {
                 moves = piece.getValidMoves();
                 if(highlightvisible == true){
                     piece.highlightMoves(moves);
-                }else{alert("ASDF")}
+                }
 			}
         }
         else if(realCheck){
@@ -848,7 +913,7 @@ function select(position) {
                 moves = piece.getCheckValidMoves(checkarray,checkopponentpos);
                 if(highlightvisible == true){
                     piece.highlightMoves(moves);
-                }else{alert("ASDF")}
+                }
 			}           
         }
     }   

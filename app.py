@@ -26,22 +26,9 @@ def background_thread():
                       {'data': 'Server generated event', 'count': count},
                       namespace='/test')
 
-
 @app.route('/')
-def index():
-    global numberofplayer, PlayerA, PlayerB
-    numberofplayer = 0
-    PlayerA = 0
-    PlayerB = 0
+def game():
     return render_template('menu.html', async_mode=socketio.async_mode)
-
-# app.route('/')
-# def game(name):
-#     global numberofplayer, PlayerA, PlayerB
-#     numberofplayer = 0
-#     PlayerA = 0
-#     PlayerB = 0
-#     return render_template('menu.html', async_mode=socketio.async_mode)
 
 @app.route('/<name>')
 def generic(name):
@@ -49,16 +36,17 @@ def generic(name):
     global PlayerB
     global winner,loser
     global numberofplayer
-    if name == "resign":
+    if name == "menu":        
+        numberofplayer = 0
+        PlayerA = 0
+        PlayerB = 0
+        return render_template('menu.html', async_mode=socketio.async_mode)
+    elif name == "resign":
         if numberofplayer == 2:
-
             return render_template(name + '.html',winners = winner, losers = loser, players = 2)
         elif numberofplayer ==1:
-
-            return render_template(name + '.html',winners = winner, losers = loser, players = 1)
-        # else:
-        #     return ""
-    if name == "index":
+            return render_template(name + '.html',winners = winner, losers = loser, players = 1) 
+    elif name == "index":
         if numberofplayer<2:
             if PlayerA ==0:
                 PlayerA = Player("White",True)
@@ -70,7 +58,6 @@ def generic(name):
                 return render_template(name + '.html',turn='false',name='black',players=2)
         elif numberofplayer >=2:
             return render_template('cannotplay.html')
-    
     else:
         return render_template(name+'.html')
 
@@ -83,8 +70,8 @@ def join(message):
         'count': session['receive_count']})
 
 #May use for disconnecting player
-@socketio.on('leave', namespace='/test')
-def leave(message):
+@socketio.on('resign', namespace='/test')
+def resign(message):
     global numberofplayer, PlayerA,PlayerB,winner,loser
     print(numberofplayer)
     if message['player'] == 'white':
@@ -97,6 +84,7 @@ def leave(message):
     PlayerB = 0 
     session['receive_count'] = session.get('receive_count', 0) -1
     emit('my_response2',{'data': 'In rooms: ' + ', '.join(rooms()),'count': session['receive_count'],'loser':message['player'],'players':numberofplayer} ,room=message['room'])
+    # numberofplayer = 0
 
 @socketio.on('updateplayers',namespace='/test')
 def updatetotalpalyers(message):

@@ -14,14 +14,28 @@
 		let finalwinner = '{{ winners }}';
 		let finalloser = '{{ losers }}';
 		let finalplayers = '{{ players }}';
+
 		window.onload = function(){
+			if (finalwinner == 'white'){
+				finalwinner = '1';
+			}else if(finalwinner == 'black'){
+				finalwinner = '2';
+			}
+			if(finalloser == 'black'){
+				finalloser = '2';
+			}else if(finalloser == 'white') {
+				finalloser = '1'
+			}
+
+
+
 			if (finalplayers==2){
-				document.getElementById('endgamepara').innerHTML = 'Player ' + finalloser + ' resigned and by default player ' +finalwinner +' wins!';
+				document.getElementById('endgamepara').innerHTML = 'Player ' + finalloser + ' resigned and by default Player ' +finalwinner +' wins!';
 				
 			} else{
 				document.getElementById('endgamepara').innerHTML = 'You have resigned from the game, you were not playing with any other player!';
 			}
-			setTimeout(function(){ window.location='/' }, 10000);
+			setTimeout(function(){ window.location='/menu' }, 5000);
 		};
 	</script>	
 </head>
