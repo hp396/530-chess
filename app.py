@@ -67,7 +67,7 @@ def generic(name):
             elif PlayerB == 0:
                 numberofplayer=2
                 PlayerB = Player("Black",False)
-                return render_template(name + '.html',turn='false',name='black')
+                return render_template(name + '.html',turn='false',name='black',players=2)
         elif numberofplayer >=2:
             return render_template('cannotplay.html')
     
@@ -97,6 +97,10 @@ def leave(message):
     PlayerB = 0 
     session['receive_count'] = session.get('receive_count', 0) -1
     emit('my_response2',{'data': 'In rooms: ' + ', '.join(rooms()),'count': session['receive_count'],'loser':message['player'],'players':numberofplayer} ,room=message['room'])
+
+@socketio.on('updateplayers',namespace='/test')
+def updatetotalpalyers(message):
+    emit('my_response3',{'data': message['players']},room=message['room'])
 
 @socketio.on('my_room_event', namespace='/test')
 def send_room_message(message):

@@ -13,6 +13,10 @@ class King extends Piece {
     }
   }
 
+  filterkingmove(){
+    //get the next moves and then compare to chessaray and
+  }
+
   getValidMoves() {
     let currentPos = Number(this.position);
     if (selectedPiece != this.position) {

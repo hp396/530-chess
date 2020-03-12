@@ -4,8 +4,7 @@
     <title>Chess Game</title>
     <link rel='stylesheet' type='text/css' media='screen' href='./css/main.css'>
     <script type=text/javascript src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src='./js/main.js'>
-    </script>
+    <script src='./js/main.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
 	<script src='js/main.js'></script>
@@ -24,16 +23,38 @@
     $(document).ready(function() {
             namespace = '/test';			
             socket = io(namespace);	
+            if (turn == 'true'){
+                turn = true;
+                
+                setturn(turn,name);
+                swal({	
+                icon: 'success',	
+                title: 'You are Player 1!',
+                text: "you play with white pieces. You cannot play until another player connects, please wait until you see another message!"	
+                });
+            }else if (turn == 'false'){
+                // turn = false;
+                myturn = false;
+                myname = name
+                totalplayers = numberofplayers
+                setTimeout(function(){ 
+                    socket.emit('updateplayers',{room: '1', 'players': totalplayers})
+                    swal({	
+                    icon: 'success',	
+                    title: 'You are Player 2!',
+                    text: "you play with black pieces"	
+                    });	 
+                }, 2000);
+                // socket.emit('updateplayers',{room: '1', 'players': totalplayers})
+                // swal({	
+                // icon: 'success',	
+                // title: 'You are Player 2!',
+                // text: "you play with black pieces"	
+                // });	
+            }
     });
     
-    if (turn == 'true'){
-        turn = true;
-		setturn(turn,name);
-	}else if (turn == 'false'){
-        turn = false;
-		setturn(turn,name);
-        // updateplayer();
-    }
+    
     function Resign(){
         socket.emit('leave', {room: '1', 'player': myname});
         window.location='/resign';
@@ -52,10 +73,10 @@
     
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	<script src="sweetalert2.all.min.js"></script>
+<script src="sweetalert2.all.min.js"></script>
 
 </head>
-<body onload="load()" style = "background-color:black">
+<body onload="load()" style = "background-image:url('https://images.chesscomfiles.com/uploads/game-gifs/90px/sky/neo/0/cc/0/1/bUMwS2d2NVFmSCFUbHQ5SWtzOCFlZzk4cHhXT0h5WkpibDNWZmVYSHlySkJsZjZTZndTcmlyN1pyekk5ZG1Cc2pzT0d6R1FHY3VZSWVkWlFta0h6dkt6cmtyR3I,.gif')">
     
     <header>
         <!-- <div class="navbar">
@@ -128,7 +149,12 @@
         <input style="visibility: hidden" type="submit" value="Join Room" id="joinSubmit">	
     </form>
 	<div>	
-<input  type="submit" value="skip turn" id="skipturn" onclick = "skipTurn()">	
+<input  type="submit" value="skip turn" id="skipturn" onclick = "skipTurn()">
+<input  type="submit" value="Toggle Difficulty" id="togglediff" onclick = "toggleDiff()">
+<!-- <input  type="submit" value="skip turn" id="skipturn" onclick = "theme1()">
+<input  type="submit" value="skip turn" id="skipturn" onclick = "theme2()">
+<input  type="submit" value="skip turn" id="skipturn" onclick = "theme2()"> -->
+
     <div id="log"></div>
 	</div>
    	<div class="Board_div" style = "background-color:white"></div>
