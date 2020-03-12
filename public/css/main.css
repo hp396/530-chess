@@ -8,13 +8,16 @@
 .MenuBody {
 	background-image: url('./../img/bg.gif');			/*	CITATION:	chess.com/gifs */
 }
+
+
+
+
 table, th , td{
     border: 1px solid black;
 }
 /* header {
     background: #006298;
 } */
-
 
 .navbar {
 	overflow: hidden;
@@ -116,6 +119,7 @@ table, th , td{
 }
 
 .jumbotron{	/*DONE*/
+	text-align: center;
     padding: 1.5rem;
     background: 0;
 	font-size:70px;
@@ -123,16 +127,27 @@ table, th , td{
 .SelectSection{
     background: #bfbc9f !important;
 }
+
+.Resign{
+	text-align:center;
+	background-image: url('./../img/gameover3.png');			/*CITATION:  https://wallpapersafari.com/w/hbqkKi/ */
+	background-position: center top;
+	background-size: 100% auto;
+}
+
 .CannotPlayMenu{	/*DONE*/
-	color:white;
+	color:black;
 	top:30%;
 	left:50%;
 	text-align:center;
-	bottom:70%;
+	bottom:70%;	
+	background-image: url('./../img/cannotplay1.png');			/*CITATION: https://support.rockstargames.com/community/200063373/115008757248 */
+	background-position: top center;
+	background-size: 100% auto;
 }
 
 .CannotPlayPara{	/*DONE*/
-	color:white;
+	color:black;
 	font-size:50px;
 	top:50%;
 	left:50%;

@@ -35,14 +35,6 @@ def index():
     PlayerB = 0
     return render_template('menu.html', async_mode=socketio.async_mode)
 
-# app.route('/')
-# def game(name):
-#     global numberofplayer, PlayerA, PlayerB
-#     numberofplayer = 0
-#     PlayerA = 0
-#     PlayerB = 0
-#     return render_template('menu.html', async_mode=socketio.async_mode)
-
 @app.route('/<name>')
 def generic(name):
     global PlayerA
@@ -51,15 +43,16 @@ def generic(name):
     global numberofplayer
     if name == "resign":
         if numberofplayer == 2:
-
             return render_template(name + '.html',winners = winner, losers = loser, players = 2)
         elif numberofplayer ==1:
-
             return render_template(name + '.html',winners = winner, losers = loser, players = 1)
         # else:
         #     return ""
     if name == "index":
         if numberofplayer<2:
+            print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSss")
+            print(PlayerA)
+            print(PlayerB)
             if PlayerA ==0:
                 PlayerA = Player("White",True)
                 numberofplayer=1
@@ -78,6 +71,8 @@ def generic(name):
 def join(message):
     join_room('1')
     session['receive_count'] = session.get('receive_count', 0) + 1  
+    print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    print(session['receive_count'])
     emit('my_response',
         {'data': 'In rooms: ' + ', '.join(rooms()),
         'count': session['receive_count']})
@@ -86,7 +81,7 @@ def join(message):
 @socketio.on('leave', namespace='/test')
 def leave(message):
     global numberofplayer, PlayerA,PlayerB,winner,loser
-    print(numberofplayer)
+
     if message['player'] == 'white':
         winner = 'black'
         loser = 'white'
