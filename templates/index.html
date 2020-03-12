@@ -45,21 +45,14 @@
                     text: "you play with black pieces"	
                     });	 
                 }, 2000);
-                // socket.emit('updateplayers',{room: '1', 'players': totalplayers})
-                // swal({	
-                // icon: 'success',	
-                // title: 'You are Player 2!',
-                // text: "you play with black pieces"	
-                // });	
             }
     });
     
     
     function Resign(){
-        socket.emit('leave', {room: '1', 'player': myname});
+        socket.emit('resign', {room: '1', 'player': myname});
         window.location='/resign';
     }		
-	
     </script>
 <script>
 
@@ -78,82 +71,19 @@
 <body onload="load()" style = "background-image:url('https://images.chesscomfiles.com/uploads/game-gifs/90px/sky/neo/0/cc/0/1/bUMwS2d2NVFmSCFUbHQ5SWtzOCFlZzk4cHhXT0h5WkpibDNWZmVYSHlySkJsZjZTZndTcmlyN1pyekk5ZG1Cc2pzT0d6R1FHY3VZSWVkWlFta0h6dkt6cmtyR3I,.gif')">
     
     <header>
-        <!-- <div class="navbar">
-            onmouseover ='document.getElementById("joinSubmit").click();' 
-            <a href="#home" onclick = "Resign()">Regisn</a>
-            <div class="dropdown">
-                <input type = "button" class="btn" value="Dropdown">
-                <div class = "dropdown-item">
-                    <a class="right">Difficulty</a>
-                    <a class="right">Theme</a>
-                </div>
-                
-            </div>
-        </div> -->
         <div class="navbar">
             <a id="disconnect" onclick="Resign()">Resign</a>
-            <div class="dropdown">
-            <button class="dropbtn" onclick="myFunction()">Dropdown
-              <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content" id="myDropdown">
-              <a href="#">Link 1</a>
-              <a href="#">Link 2</a>
-              <a href="#">Link 3</a>
-            </div>
-            </div> 
+            <!-- <a value="skip turn" id="skipturn" onclick = "skipTurn()"></a> -->
+            <a class="btn" value="Toggle Difficulty" id="togglediff" onclick = "toggleDiff()">Toggle Difficulty</a>
+            <a value="Modern Theme" onclick = "moderntheme()">Modern Theme</a>
+            <a value="Classic Theme" onclick = "classictheme()">Classic Theme</a>
+            <a value="Simple Black & White" onclick = "bwtheme()">Simple Black & White</a>
           </div>
     </header>
-    
-    
-    <!-- <header>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    <nav class="navbar navbar-expand-md navbar-dark">
-                        <a class="navbar-brand" href="/"><img src="/img/bike-icon.svg" style="max-height: 40px;"></a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item{% if active == 'Home' %} active{% endif %}">
-                                    <a class="nav-link" href="/">Home</a>
-                                </li>
-                                <li class="nav-item{% if active == 'About' %} active{% endif %}">
-                                    <a class="nav-link" href="/about">About</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Bikes
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/bikes">Our Bikes</a>
-                                        <a class="dropdown-item" href="/rent">Rent a Bike</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>		
-	</header> -->
-    
-    
-    <form id="join" method="POST" action="#">
+    <!-- <form id="join" method="POST" action="#">
         <input style="visibility: hidden" type="submit" value="Join Room" id="joinSubmit">	
-    </form>
-	<div>	
-<input  type="submit" value="skip turn" id="skipturn" onclick = "skipTurn()">
-<input  type="submit" value="Toggle Difficulty" id="togglediff" onclick = "toggleDiff()">
-<!-- <input  type="submit" value="skip turn" id="skipturn" onclick = "theme1()">
-<input  type="submit" value="skip turn" id="skipturn" onclick = "theme2()">
-<input  type="submit" value="skip turn" id="skipturn" onclick = "theme2()"> -->
-
+    </form> -->
+	<div>
     <div id="log"></div>
 	</div>
    	<div class="Board_div" style = "background-color:white"></div>
