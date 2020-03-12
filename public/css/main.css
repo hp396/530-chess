@@ -18,7 +18,7 @@ table, th , td{
 
 .navbar {
 	overflow: hidden;
-	background-color: #333;
+	background-color: #006298;
 	font-family: Arial, Helvetica, sans-serif;
   }
   
@@ -28,15 +28,20 @@ table, th , td{
 	color: white;
 	text-align: center;
 	padding: 14px 16px;
-	text-decoration: none;
   }
   
   
-  .navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
-	background-color: red;
+  .navbar a:hover{
+	color: red;
+	background-color: black;
+	cursor: pointer;
   }
 
-
+.index{
+	background-image:url('./../img/gameplay.jpg');
+	background-position: center top;
+	background-size: 100% auto;
+}
 
 /* .navbar-expand-md .navbar-nav .nav-link {
     padding-left: 1rem;
