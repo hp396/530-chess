@@ -139,6 +139,17 @@ table, th , td{
 	background: gray;
 } 
 
+.ModernBlack{
+	height: 80px;
+	width:  80px;
+	background: #99ccff;
+}
+.ModernWhite{
+	height: 80px;
+	width:  80px;
+	background: #e6f7ff;
+}
+
 th,td{
     text-align: left;
 }

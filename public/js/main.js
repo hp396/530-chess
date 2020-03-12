@@ -91,47 +91,36 @@ function toggleDiff(){
     highlightvisible = !highlightvisible;
 }
 
-function modernbluetheme(){
-    var table = document.getElementById('chesstable');
+function moderntheme(){
+    var newblackclass = 'ModernBlack';
+    let newwhiteclass = 'ModernWhite';
+    let currentblack=  clearvalidclass.split(" ")[0];
+    clearbg();
+    var tablediv = $('#chesstable div.'+CSS.escape(currentblack));
 
-    for (var i = 0, row; row = table.rows[i]; i++) {
-        for (var j = 0, col; col = row.cells[j]; j++) {
-            let blackcol = col.querySelector(clearvalidclass);
-            if (blackcol != null){
-                if(blackcol.hasAttribute('style')){
-                    blackcol.style.removeProperty('background');
-                }
-                blackcol.classList.remove("clearvalidclass")
-                blackcol.classList.add("BlueBlock");
-                clearvalidclass = "BlueBlock BlackBlock";
-                blackbg = '#0000FF';
-                whitebg='';
-            }
-        }  
-
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentblack));
+        tablediv.addClass(CSS.escape(newblackclass));  
     }
-    
+
+    var tablediv = $('#chesstable div.'+CSS.escape(currentwhite));
+
+    for(let i =0;i<tablediv.length;i++){
+        tablediv.removeClass(CSS.escape(currentwhite));
+        tablediv.addClass(CSS.escape(newwhiteclass));  
+    }
+    clearvalidclass = "ModernBlack BlackBlock";
+    currentwhite = newwhiteclass;
+    blackbg = '#99ccff';
+    whitebg= '#e6f7ff';    
 }
 
 function clearbg(){
     var table = document.getElementById('chesstable');
     var tablediv = $('#chesstable div');
-    console.log(tablediv)
     for(let i =0;i<tablediv.length;i++){
         tablediv.removeAttr("style");
-        // tablediv.addClass(CSS.escape(newblackclass));  
     }
-    // $("#foo").removeAttr("style");
-		
-    // for (var i = 0, row; row = table.rows[i]; i++) {
-    //     for (var j = 0, col; col = row.cells[j]; j++) {
-    //         if(col.hasAttribute('style')){
-    //             col.removeAttribute('style');
-    //         }
-    //         console.log(col);
-    //     }  
-
-    // }
 }
 
 function bwtheme(){
@@ -285,7 +274,7 @@ function test(msg){
                 playerwinner = "Player 1"
             }else{ playerwinner = "Player 2"}
             swal({title:"CheckMate, " + playerwinner +" wins!", icon: "success"});	
-            setTimeout(function(){ window.location='/menu' }, 5000);
+            setTimeout(function(){ window.location='/menu' }, 3000);
         }else{	
             swal({	
                 icon: 'error',	
@@ -393,9 +382,9 @@ function clearValidMoves() {
         if (chessArray[i].getPosition() == oldSelectedPiece) {
             let selectedPiece = chessArray[i].getMoveArray()
             for (let j = 0; j < selectedPiece.length; j++) {
-                if ((document.getElementById(selectedPiece[j]).parentElement.className == "BlackDimension BlackBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "BlackBlock ClassicBlack")) {
+                if ((document.getElementById(selectedPiece[j]).parentElement.className == "ModernBlack BlackBlock")||(document.getElementById(selectedPiece[j]).parentElement.className == "BlackDimension BlackBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "BlackBlock ClassicBlack")) {
                     document.getElementById(selectedPiece[j]).parentElement.style.background = blackbg;
-                } else if ((document.getElementById(selectedPiece[j]).parentElement.className == "BoardBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "ClassicWhite")){
+                } else if ((document.getElementById(selectedPiece[j]).parentElement.className == "ModernWhite") ||(document.getElementById(selectedPiece[j]).parentElement.className == "BoardBlock") || (document.getElementById(selectedPiece[j]).parentElement.className == "ClassicWhite")){
                     document.getElementById(selectedPiece[j]).parentElement.style.background = whitebg;
                 } 
             }
@@ -421,7 +410,7 @@ function capture(){
 
 function clearMoveMade() {
     for (let i = 0; i < moveOptions.length; i++) {
-        if ((document.getElementById(moveOptions[i].toString()).parentElement.className == "BlackDimension BlackBlock") ||(document.getElementById(moveOptions[i].toString()).parentElement.className== "BlackBlock ClassicBlack")){
+        if ((document.getElementById(moveOptions[i].toString()).parentElement.className == "BlackBlock ModernBlack")||(document.getElementById(moveOptions[i].toString()).parentElement.className == "BlackDimension BlackBlock") ||(document.getElementById(moveOptions[i].toString()).parentElement.className== "BlackBlock ClassicBlack")){
             document.getElementById(moveOptions[i].toString()).parentElement.style.background = blackbg;
         } else {
             document.getElementById(moveOptions[i].toString()).parentElement.style.background = whitebg;
@@ -461,101 +450,85 @@ function checkPawnPromotion(childId){
             index = i;
         }
     }
-    
+
     promotedPieceType = promotedPiece.source.substring(promotedPiece.source.length-6, promotedPiece.source.length);
-    
+    // console.log(promotedPieceType);
     promotedPiecePosition = promotedPiece.position;
+    // console.log(promotedPiecePosition);
     if(promotedPieceType.includes("P.png")){
         switch(promotedPieceType[0]){
             case "b":
                 if(promotedPiecePosition > 80 && promotedPiecePosition < 90){
                     let pieceType = "black";
-                    var choice;
-                    swal("Write something here:", {
-                        icon:"info",
-                        title:"Pawn promotion!",
-                        text:"Valid promotion inputs: Queen, Bishop, Rook, Knight",
-                        content: "input",
-                      })
-                    .then((value) => {
-                        choice = value;
-                        if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
-                            console.log("User cancelled the prompt.");
-                        }else {
-                            switch(choice.toLowerCase()){
-                                case "queen":
-                                    sourcePromoted = "Pieces/Black/bQ.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Queen(promotedPiecePosition, sourcePromoted, pieceType);	
-                                    break;
-                                case "knight":
-                                    sourcePromoted = "Pieces/Black/bN.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Knight(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                                case "rook":
-                                    sourcePromoted = "Pieces/Black/bR.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Rook(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                                case "bishop":
-                                    sourcePromoted = "Pieces/Black/bB.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Bishop(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                            }
-
+                    // console.log("can promote");
+                    var choice = prompt("What do you want to promote to?");
+                    if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
+                        console.log("User cancelled the prompt.");
+                    } else {
+                        switch(choice.toLowerCase()){
+                            case "queen":
+                                sourcePromoted = "Pieces/Black/bQ.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Queen(promotedPiecePosition, sourcePromoted, pieceType);	
+                                break;
+                            case "knight":
+                                sourcePromoted = "Pieces/Black/bN.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Knight(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
+                            case "rook":
+                                sourcePromoted = "Pieces/Black/bR.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Rook(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
+                            case "bishop":
+                                sourcePromoted = "Pieces/Black/bB.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Bishop(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
                         }
-
-                    });
+                    }
                 }
                 break;
             case "w":
                 if(promotedPiecePosition > 10 && promotedPiecePosition < 20){
                     let pieceType = "white";
-                    var choice;
-                    swal("Write something here:", {
-                        title:"Pawn promotion!",
-                        text:"Valid promotion inputs: Queen, Bishop, Rook, Knight",
-                        content: "input",
-                      })
-                    .then((value) => {
-                        choice = value;
-                        if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
-                            console.log("User cancelled the prompt.");
-                        } else {
-                            switch(choice.toLowerCase()){
-                                case "queen":
-                                    sourcePromoted = "Pieces/White/wQ.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Queen(promotedPiecePosition, sourcePromoted, pieceType);	
-                                    break;
-                                case "knight":
-                                    sourcePromoted = "Pieces/White/wN.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Knight(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                                case "rook":
-                                    sourcePromoted = "Pieces/White/wR.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Rook(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                                case "bishop":
-                                    sourcePromoted = "Pieces/White/wB.png"
-                                    document.getElementById(promotedPiecePosition).removeAttribute("src");
-                                    document.getElementById(promotedPiecePosition).src = sourcePromoted;
-                                    chessArray[index] = new Bishop(promotedPiecePosition, sourcePromoted, pieceType);
-                                    break;
-                            }
+                    // console.log("can promote");
+                    var choice = prompt("What do you want to promote to?");
+                    if (choice == null || choice == "" || !promotionChoice.includes(choice.toLowerCase())) {
+                        console.log("User cancelled the prompt.");
+                    } else {
+                        switch(choice.toLowerCase()){
+                            case "queen":
+                                sourcePromoted = "Pieces/White/wQ.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Queen(promotedPiecePosition, sourcePromoted, pieceType);	
+                                break;
+                            case "knight":
+                                sourcePromoted = "Pieces/White/wN.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Knight(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
+                            case "rook":
+                                sourcePromoted = "Pieces/White/wR.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Rook(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
+                            case "bishop":
+                                sourcePromoted = "Pieces/White/wB.png"
+                                document.getElementById(promotedPiecePosition).removeAttribute("src");
+                                document.getElementById(promotedPiecePosition).src = sourcePromoted;
+                                chessArray[index] = new Bishop(promotedPiecePosition, sourcePromoted, pieceType);
+                                break;
                         }
-                    });
+                    }
                 }
                 break;
         }

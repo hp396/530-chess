@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = Lock()
-
+# app.title("NOT FLASK")
 
 def background_thread():
     """Example of how to send server generated events to clients."""
@@ -46,6 +46,8 @@ def generic(name):
             return render_template(name + '.html',winners = winner, losers = loser, players = 2)
         elif numberofplayer ==1:
             return render_template(name + '.html',winners = winner, losers = loser, players = 1) 
+        else:
+            return render_template(name+'.html')
     elif name == "index":
         if numberofplayer<2:
             if PlayerA ==0:

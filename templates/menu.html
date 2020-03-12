@@ -1,76 +1,28 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Flask-SocketIO Test</title>
-	
+    <title>Chess Menu</title>
     <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <link rel='stylesheet' type='text/css' media='screen' href='./css/main.css'>
+    <link rel="icon" type="image/png" href="img/favicon.png" />  			<!-- CITATION: https://www.freefavicon.com/freefavicons/objects/iconinfo/chess-piece-silhouette---black-knight--caballo-negro-152-275297.html -->
 	<script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             namespace = '/test';
-
             var socket = io(namespace);
-
-            socket.on('connect', function() {
-                socket.emit('my_event', {data: 'I\'m connected!'});
-            });
             socket.on('my_response', function(msg, cb) {				 
                 if (cb)
                     cb();
 					window.location = "/index";
             });
-			
 			socket.on('my_response1', function(msg, cb) {
                 if (cb)
                     cb();
             });
-
-            var ping_pong_times = [];
-            var start_time;
-            window.setInterval(function() {
-                start_time = (new Date).getTime();
-                socket.emit('my_ping');
-            }, 1000);
-            socket.on('my_pong', function() {
-                var latency = (new Date).getTime() - start_time;
-                ping_pong_times.push(latency);
-                ping_pong_times = ping_pong_times.slice(-30); // keep last 30 samples
-                var sum = 0;
-                for (var i = 0; i < ping_pong_times.length; i++)
-                    sum += ping_pong_times[i];
-                $('#ping-pong').text(Math.round(10 * sum / ping_pong_times.length) / 10);
-            });
-            
             $('form#join').submit(function(event) {
                 socket.emit('join', {room: '1'});
                 return false;
             });
-            $('form#emit').submit(function(event) {
-                socket.emit('my_event', {data: $('#emit_data').val()});
-                return false;
-            });
-            $('form#broadcast').submit(function(event) {
-                socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
-                return false;
-            });
-			// $('form#send_room').submit(function(event) {
-            //     socket.emit('my_room_event', {room: $('#room_name').val(), data: $('#room_data').val()});
-            //     return false;
-            // });
-           $('form#leave').submit(function(event) {
-                socket.emit('leave', {room: $('#leave_room').val()});
-                return false;
-            });
-            $('form#close').submit(function(event) {
-                socket.emit('close_room', {room: $('#close_room').val()});
-                return false;
-            });
-            $('form#disconnect').submit(function(event) {
-                socket.emit('disconnect_request');
-                return false;
-            });
-            
         });
     </script>
 
@@ -80,23 +32,17 @@
 		<h1 class="jumbotron">CHESS Game</h1>
 	<img src="Pieces/Black/bK.png" height="150" width="150">
 	<img src="Pieces/White/wK.png" height="150" width="150">
-
 	</div>
-	<img >
-	<div class ="MenuDiv">
-		
+	<div class ="MenuDiv">	
 	<form action="?" method="POST">
     </form>
 	<form id="join" method="POST" action='#' >
-
-		<input class="btn" type="submit" id="join_room" value="Start Game">
-		
-	</form>
+	    <input class="btn" type="submit" id="join_room" value="Start Game">
+    </form>
 	</div>
-
 	<div id="log"></div>
 </body>
 <footer>
-    <small style="color: azure;position: absolute;text-align: center;padding-left: 67%;bottom: 10px;">&copy; Copyright 2021, Drexel University Version 2.4</small>
+    <small style="color: azure;position: absolute;text-align: center;padding-left: 67%;bottom: 10px;">&copy; Copyright 2021, Drexel University Version 3.6</small>
 </footer>
 </html>
