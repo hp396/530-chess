@@ -5,6 +5,7 @@ from flask import Flask, render_template, session, request, \
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 import sys
+import requests
 import json
 from Player import Player
 async_mode = None
@@ -71,11 +72,22 @@ def join(message):
         {'data': 'In rooms: ' + ', '.join(rooms()),
         'count': session['receive_count']})
 
+@app.route('/captcha',methods=['POST'])
+def captchverify():
+    captcha_response = request.form['response']
+    secret = "6Ld0pNwUAAAAAKcGkORPEbPW9W1GcsFY6Y7tGUU0"
+    payload = {'response':captcha_response, 'secret':secret}
+    response = requests.post("https://www.google.com/recaptcha/api/siteverify", payload)
+    response_text = json.loads(response.text)
+    answer = response_text['success']
+    print("+++++++++++++++++++++++++++++++++++")
+    print(answer)
+    return json.dumps(answer)
+
 #May use for disconnecting player
 @socketio.on('resign', namespace='/test')
 def resign(message):
     global numberofplayer, PlayerA,PlayerB,winner,loser
-    print(numberofplayer)
     if message['player'] == 'white':
         winner = 'black'
         loser = 'white'

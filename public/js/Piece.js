@@ -27,7 +27,7 @@ class Piece {
         for (let i = 0; i < validMoves.length; i++)
             document.getElementById(validMoves[i]).parentElement.style.background = "#bfbc9f";
     }
-
+    highlightfake(validMoves){}
     getMoveArray() {
         return this.validMoves;
     }

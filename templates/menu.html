@@ -6,7 +6,9 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <link rel='stylesheet' type='text/css' media='screen' href='./css/main.css'>
     <link rel="icon" type="image/png" href="img/favicon.png" />  			<!-- CITATION: https://www.freefavicon.com/freefavicons/objects/iconinfo/chess-piece-silhouette---black-knight--caballo-negro-152-275297.html -->
-	<script type="text/javascript" charset="utf-8">
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+    <script src='https://www.google.com/recaptcha/api.js?onload=onJoin&render=explicit'async defer></script>
+    <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             namespace = '/test';
             var socket = io(namespace);
@@ -25,9 +27,98 @@
             });
         });
     </script>
+    <!-- <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('_reCAPTCHA_site_key_', {action: 'homepage'}).then(function(token) {
+            console.log(token);
+        
+        });
+    });
+    </script> -->
+<script>
+		
+		function onJoin(){
+			grecaptcha.render(document.getElementById('join_room'), {
+					'sitekey' : '6Ld0pNwUAAAAANxyFZ7of78FkY2__fP6vHPPRpRX',
+					'size': 'invisible',
+					'theme':'dark',
+					'callback' : function(response) {
+						//Make this a function
+						checkcaptcha(response)
+	
+						//window.location = "/index";
+						//socket.emit('join', {room: '1'});
+					}
+                  }, true); 
+		}
+		function checkcaptcha(response){
+				//console.log("ASDF");
+				
+				//var postData = $('#form').serialize();
+				//postData[ 'g-recaptcha-response' ] = response;
+					//var response = grecaptcha.getResponse( captchaWidgetId );
+				//console.log(response);
+				
+				response = {'response':response};
+				res = JSON.parse(JSON.stringify(response));
+				console.log(res)
+				$.post( '/captcha',res,function(success) {
+					if(success){
+						window.location='/index';
+					}else{
+						//Create page for bots? XD
+					}
 
+				//	 were we successful?
+				});
+			}
+	</script>
+</script>
 </head>
 <body class="MenuBody">
+    <!---	CS 530 --->
+	<!-- <script src="https://www.google.com/recaptcha/api.js?render=_reCAPTCHA_site_key"></script> -->
+	<!-- <script src='https://www.google.com/recaptcha/api.js?onload=onJoin&render=explicit'></script> -->
+	<script>
+	
+		
+		// function onJoin(){
+
+		// 	grecaptcha.render(document.getElementById('join_room'), {
+                    
+		// 			'sitekey' : '6Ld0pNwUAAAAANxyFZ7of78FkY2__fP6vHPPRpRX',
+                    
+					
+		// 			'callback' : function() {
+		// 				window.location = "/index";
+		// 				socket.emit('join', {room: '1'});
+		// 			}
+        //           }, true); 
+        // }
+        // function onJoin(){
+        //     var response = grecaptcha.getResponse();
+        //     if(response.length == 0){
+        //         swal({	
+        //             icon: 'error',	
+        //             title: 'Retry!'
+        //         }); 
+        //     }
+        //     $.ajax({
+        //         type: "POST",
+        //         url: 'https://www.google.com/recaptcha/api/siteverify',
+        //         data: {"secret" : "(your-secret-key)", "response" : response},
+        //         success: function(data) { console.log(data); }
+        //     });
+        
+        // }
+	</script>	
+	
+	
+		<!---	CS 530--->
+	
+		
+        
+		
 	<div class="MenuHeading">
 		<h1 class="jumbotron">CHESS Game</h1>
 	<img src="Pieces/Black/bK.png" height="150" width="150">
@@ -37,8 +128,14 @@
 	<form action="?" method="POST">
     </form>
 	<form id="join" method="POST" action='#' >
-	    <input class="btn" type="submit" id="join_room" value="Start Game">
+        
+        <input class="g-recaptcha btn" data-sitekey="6Ld0pNwUAAAAANxyFZ7of78FkY2__fP6vHPPRpRX" data-size="invisible" data-callback="onJoin" class="btn" href="/index" type="submit" id="join_room" value="Start Game">
+	
+        
+        <!-- <input class="g-recaptcha btn" data-sitekey="6Ld0pNwUAAAAANxyFZ7of78FkY2__fP6vHPPRpRX" data-size="invisible" data-callback="onJoin" class="btn" href="/index" type="submit" id="join_room" value="Start Game"> -->
+	    <!-- <input class="btn" type="submit" id="join_room" value="Start Game"> -->
     </form>
+
 	</div>
 	<div id="log"></div>
 </body>
